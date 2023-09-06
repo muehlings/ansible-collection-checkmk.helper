@@ -1,0 +1,20 @@
+---
+folders:
+- attributes:
+    tag_agent: special-agents
+  name: special-agent
+  path: /special-agent
+- attributes:
+    tag_agent: no-agent
+    tag_snmp_ds: snmp-v2
+  name: snmp
+  path: /snmp
+- attributes:
+    tag_agent: no-agent
+  name: piggyback
+  path: /piggyback
+- attributes:
+    tag_agent: cmk-agent
+  name: cmk-agent
+  path: /cmk-agent
+

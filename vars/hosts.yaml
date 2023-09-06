@@ -1,0 +1,8 @@
+---
+assets:
+- attributes:
+    ipaddress: 127.0.0.1
+    tag_pdvms_Operating_System: pdvms_Linux
+  folder: /
+  name: PDV-Nagios01
+

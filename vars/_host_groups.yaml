@@ -1,0 +1,3 @@
+---
+host_groups:
+  - { name: "Do_not_monitor", title: "Do not monitor!", state: "present", customer: "provider" }

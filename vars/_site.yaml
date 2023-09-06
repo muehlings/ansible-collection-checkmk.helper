@@ -1,0 +1,3 @@
+server_url: "http://localhost"
+automation_user: "AUTOMATION_USER"
+automation_secret: "AUTOMATION_SECRET"

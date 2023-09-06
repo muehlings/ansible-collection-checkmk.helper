@@ -1,0 +1,50 @@
+---
+rulesets:
+- - rule:
+      conditions:
+        host_labels: []
+        host_tags: []
+        service_labels: []
+      location:
+        folder: /piggyback
+      properties:
+        comment: 'piggyback'
+        description: Assignment of hosts to host groups - Do not monitor
+      value_raw: '''Do_not_monitor'''
+    ruleset: host_groups
+  - rule:
+      conditions:
+        host_labels: []
+        host_tags:
+        - key: criticality
+          operator: is
+          value: offline
+        service_labels: []
+      location:
+        folder: /
+      properties:
+        description: Assignment of hosts to host groups - Do not monitor
+      value_raw: '''Do_not_monitor'''
+    ruleset: host_groups
+- - rule:
+      conditions:
+        host_labels: []
+        host_tags: []
+        service_labels: []
+      location:
+        folder: /
+      properties:
+        description: Put all hosts into the contact group "all"
+      value_raw: '''all'''
+    ruleset: host_contactgroups
+- - rule:
+      conditions:
+        host_labels: []
+        host_tags: []
+        service_labels: []
+      location:
+        folder: /
+      properties:
+        description: Maximum number of check attempts for service
+      value_raw: '5'
+    ruleset: extra_service_conf:max_check_attempts
