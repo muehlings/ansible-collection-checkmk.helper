@@ -1,0 +1,29 @@
+---
+- name: 'Manage checkmk contact groups'
+  hosts: "test"
+  gather_facts: False
+  connection: local
+
+  tasks:
+    # Create a single contact group.
+    - name: "Create a single contact group."
+      checkmk.general.contact_group:
+        server_url: "{{server_url}}"
+        site: "{{site}}"
+        automation_user: "{{automation_user}}"
+        automation_secret: "{{automation_secret}}"
+        name: "{{item.name}}"
+        title: "{{item.title}}"
+        customer: "{{item.customer | default(omit)}}"
+        state: "{{item.state}}"
+      loop: "{{ contact_groups|flatten(levels=1) }}"
+
+    - name: "Activate changes including foreign changes."
+      checkmk.general.activation:
+        server_url: "{{server_url}}"
+        site: "{{site}}"
+        automation_user: "{{automation_user}}"
+        automation_secret: "{{automation_secret}}"
+        force_foreign_changes: 'true'
+#      run_once: 'true'
+

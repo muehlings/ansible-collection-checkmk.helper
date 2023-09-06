@@ -1,0 +1,29 @@
+---
+- name: 'Manage checkmk folders'
+  hosts: "test"
+  gather_facts: False
+  connection: local
+
+  tasks:
+    # Create a single folder.
+    - name: "Create a single folder."
+      checkmk.general.folder:
+        server_url: "{{server_url}}"
+        site: "{{site}}"
+        automation_user: "{{automation_user}}"
+        automation_secret: "{{automation_secret}}"
+        path: "{{item.path}}"
+        name: "{{item.name}}"
+        attributes: "{{item.attributes}}"
+        state: "present"
+      loop: "{{ folders|flatten(levels=1) }}"
+
+    - name: "Activate changes including foreign changes."
+      checkmk.general.activation:
+        server_url: "{{server_url}}"
+        site: "{{site}}"
+        automation_user: "{{automation_user}}"
+        automation_secret: "{{automation_secret}}"
+        force_foreign_changes: 'true'
+#      run_once: 'true'
+

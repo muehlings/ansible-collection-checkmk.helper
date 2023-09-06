@@ -1,0 +1,28 @@
+---
+- name: 'Manage checkmk service_groups'
+  hosts: "test"
+  gather_facts: False
+  connection: local
+
+  tasks:
+    # Create a single service_group.
+    - name: "Create a single service group."
+      checkmk.general.service_group:
+        server_url: "{{server_url}}"
+        site: "{{site}}"
+        automation_user: "{{automation_user}}"
+        automation_secret: "{{automation_secret}}"
+        name: "{{item.name}}"
+        title: "{{item.title}}"
+        customer: "{{item.customer | default(omit)}}"
+        state: "{{item.state}}"
+      loop: "{{ service_groups|flatten(levels=1) }}"
+
+    - name: "Activate changes including foreign changes."
+      checkmk.general.activation:
+        server_url: "{{server_url}}"
+        site: "{{site}}"
+        automation_user: "{{automation_user}}"
+        automation_secret: "{{automation_secret}}"
+        force_foreign_changes: 'true'
+#      run_once: 'true'

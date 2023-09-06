@@ -1,0 +1,20 @@
+---
+- name: 'Manage checkmk rulesets'
+  hosts: "test"
+  gather_facts: False
+  connection: local
+
+  tasks:
+    # Create a single rule
+    - name: "Create a rule for '{{item.ruleset}}' in '/'"
+      checkmk.general.rule:
+        "automation_secret": "{{automation_secret}}"
+        "automation_user": "{{automation_user}}"
+        "rule": "{{item.rule}}"
+        "ruleset": "{{item.ruleset}}"
+        "server_url": "{{server_url}}"
+        "site": "{{site}}"
+      loop: "{{ rulesets|flatten(levels=1) }}"
+      loop_control:
+        label: "{{ item.ruleset }} [{{item.rule.properties.description | default()}}]"
+

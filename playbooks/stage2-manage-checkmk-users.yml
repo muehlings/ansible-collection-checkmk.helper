@@ -1,0 +1,58 @@
+---
+- name: 'Manage checkmk users'
+  hosts: "test"
+  gather_facts: False
+  connection: local
+
+  tasks:
+    # Create a user.
+    - name: "Create a user."
+      checkmk.general.user:
+        server_url: "{{server_url}}"
+        site: "{{site}}"
+        automation_user: "{{automation_user}}"
+        automation_secret: "{{automation_secret}}"
+        name: "{{item.name}}"
+        fullname: "{{item.fullname}}"
+        email: "{{item.contact_options.email}}"
+        fallback_contact: "{{item.contact_options.fallback_contact}}"
+        customer: "{{item.customer | default(omit)}}"
+        auth_type: "{{item.auth_option.auth_type}}"
+        password: "{{item.auth_option.password}}"
+        contactgroups:
+            - "all"
+        state: "present"
+      loop: "{{ users|flatten(levels=1) }}"
+      loop_control:
+        label: "{{ item.name }}"
+
+    # Reset passwords if user already created.
+    - name: "Set user password."
+      checkmk.general.user:
+        server_url: "{{server_url}}"
+        site: "{{site}}"
+        automation_user: "{{automation_user}}"
+        automation_secret: "{{automation_secret}}"
+        name: "{{item.name}}"
+        fullname: "{{item.fullname}}"
+        email: "{{item.contact_options.email}}"
+        fallback_contact: "{{item.contact_options.fallback_contact}}"
+        customer: "{{item.customer | default(omit)}}"
+        auth_type: "{{item.auth_option.auth_type}}"
+        password: "{{item.auth_option.password}}"
+        contactgroups:
+            - "all"
+        state: "reset_password"
+      loop: "{{ users|flatten(levels=1) }}"
+      loop_control:
+        label: "{{ item.name }}"
+
+    - name: "Activate changes including foreign changes."
+      checkmk.general.activation:
+        server_url: "{{server_url}}"
+        site: "{{site}}"
+        automation_user: "{{automation_user}}"
+        automation_secret: "{{automation_secret}}"
+        force_foreign_changes: 'true'
+#      run_once: 'true'
+

@@ -1,0 +1,31 @@
+---
+- name: 'Manage checkmk hosts'
+  hosts: "test"
+  gather_facts: False
+  connection: local
+  ignore_errors: True
+
+  tasks:
+    # Create a host with IP.
+    - name: "Create a host with IP address."
+      checkmk.general.host:
+        server_url: "{{server_url}}"
+        site: "{{site}}"
+        automation_user: "{{automation_user}}"
+        automation_secret: "{{automation_secret}}"
+        name: "{{item.name}}"
+        attributes: "{{item.attributes}}"
+        folder: "{{item.folder}}"
+        state: "present"
+      loop: "{{ assets|flatten(levels=1) }}"
+      loop_control:
+        label: "{{ item.name }} ({{item.attributes.ipaddress | default(item.folder)}})"
+
+    - name: "Activate changes including foreign changes."
+      checkmk.general.activation:
+        server_url: "{{server_url}}"
+        site: "{{site}}"
+        automation_user: "{{automation_user}}"
+        automation_secret: "{{automation_secret}}"
+        force_foreign_changes: 'true'
+#      run_once: 'true'

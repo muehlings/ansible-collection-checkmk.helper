@@ -1,0 +1,24 @@
+---
+- name: 'Manage checkmk tag_groups'
+  hosts: "test"
+  gather_facts: False
+  connection: local
+
+  tasks:
+    # Create a single tag_group
+    - name: "Create tag_group '{{item.ident}}"
+      checkmk.general.tag_group:
+        "automation_secret": "{{automation_secret}}"
+        "automation_user": "{{automation_user}}"
+        "id": "{{item.ident}}"
+        "title": "{{item.title}}"
+        "topic": "{{item.topic}}"
+        "choices": "{{item.choices}}"
+        "server_url": "{{server_url}}"
+        "site": "{{site}}"
+        "state": "present"
+
+      loop: "{{ tag_groups|flatten(levels=1) }}"
+      loop_control:
+        label: "{{ item.ident }}"
+
